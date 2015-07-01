@@ -22,6 +22,16 @@ namespace Markdown.Xaml
         public static readonly DependencyProperty MarkdownProperty =
             DependencyProperty.Register("Markdown", typeof(Markdown), typeof(TextToFlowDocumentConverter), new PropertyMetadata(null));
 
+        public Thickness PagePadding
+        {
+            get { return (Thickness)GetValue(PagePaddingProperty); }
+            set { SetValue(PagePaddingProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Markdown.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PagePaddingProperty =
+            DependencyProperty.Register("PagePadding", typeof(Thickness), typeof(TextToFlowDocumentConverter), new PropertyMetadata(new Thickness(0)));
+
         /// <summary>
         /// Converts a value. 
         /// </summary>
@@ -42,8 +52,9 @@ namespace Markdown.Xaml
             var text = (string)value;
 
             var engine = Markdown ?? mMarkdown.Value;
-
-            return engine.Transform(text);
+            var fd = engine.Transform(text);
+            fd.PagePadding = PagePadding;
+            return fd;
         }
 
         /// <summary>
